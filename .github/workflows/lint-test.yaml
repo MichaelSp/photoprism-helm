@@ -21,12 +21,6 @@ jobs:
 
       - name: Install Helm
         uses: azure/setup-helm@v3.5
-        with:
-          version: v3.6.3
-
-      - name: Add dependency chart repos
-        run: |
-          helm repo add bitnami https://charts.bitnami.com/bitnami
 
       - name: Set up chart-testing
         uses: helm/chart-testing-action@v2.3.1
