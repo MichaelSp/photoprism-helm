@@ -100,7 +100,6 @@ resources:
 
 # affinity: {}
 
-
 # To use a remote MySQL instance, set the value for driver to 'mysql'
 database:
   driver: sqlite
