@@ -2,7 +2,7 @@ apiVersion: v2
 name: photoprism
 home: https://photoprism.org/
 description: A Photoprism Helm chart for Kubernetes
-appVersion: "20190703"
-version: 0.1.2
+appVersion: "221118-e58fee0fb"
+version: 0.1.3
 sources:
 - https://github.com/photoprism/photoprism
