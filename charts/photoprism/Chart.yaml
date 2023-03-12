@@ -3,6 +3,6 @@ name: photoprism
 home: https://photoprism.org/
 description: A Photoprism Helm chart for Kubernetes
 appVersion: "221118-e58fee0fb"
-version: 0.1.5
+version: 0.1.6
 sources:
 - https://github.com/photoprism/photoprism
