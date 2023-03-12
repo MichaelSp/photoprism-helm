@@ -1,0 +1,39 @@
+{{- if .Values.ingress.enabled }}
+apiVersion: {{ include "photoprism.ingress.apiVersion" }}
+kind: Ingress
+metadata:
+  name: {{ include "photoprism.fullname" . }}
+  labels:
+{{ include "photoprism.labels" . | indent 4 }}
+  {{- with .Values.ingress.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if .Values.ingress.className }}
+  ingressClassName: {{ .Values.ingress.className }}
+  {{- end }}
+  rules:
+  {{- range .Values.ingress.hosts }}
+    - host: {{ .host | quote }}
+      http:
+        paths:
+        {{- range .paths }}
+          - path: {{ . }}
+            backend:
+              {{- if semverCompare ">=1.19-0" $.Capabilities.KubeVersion.GitVersion }}
+              service:
+                name: {{ include "photoprism.fullname" . }}
+                port:
+                  number: {{ .Values.service.port }}
+              {{- else }}
+              serviceName: {{ include "photoprism.fullname" . }}
+              servicePort: http
+              {{- end }}
+        {{- end }}
+  {{- end }}
+{{- if .Values.ingress.tls }}
+  tls:
+{{ toYaml .Values.ingress.tls | indent 4 }}
+{{- end -}}
+{{- end }}

@@ -1,2 +1,7 @@
-custom-values-ingress.yaml
-custom-values.yaml 
+# IDE resources
+.vscode
+.idea
+.devcontainer/
+
+# Helm resources
+charts/*/charts
