@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: environment
+  name: {{ template "nextcloud.fullname" . }}-env
   labels:
 {{ include "photoprism.labels" . | indent 4 }}
 data:
