@@ -3,6 +3,18 @@ entries:
   photoprism:
   - apiVersion: v2
     appVersion: 221118-e58fee0fb
+    created: "2023-03-12T16:58:55.217038146Z"
+    description: A Photoprism Helm chart for Kubernetes
+    digest: 93b7074b937c21ca19f46a03691670a215148fc04e1f010ccc5b775422f7af0e
+    home: https://photoprism.org/
+    name: photoprism
+    sources:
+    - https://github.com/photoprism/photoprism
+    urls:
+    - https://github.com/MichaelSp/photoprism-helm/releases/download/photoprism-0.1.8/photoprism-0.1.8.tgz
+    version: 0.1.8
+  - apiVersion: v2
+    appVersion: 221118-e58fee0fb
     created: "2023-03-12T16:51:59.775380519Z"
     description: A Photoprism Helm chart for Kubernetes
     digest: 022712c9c9d8a5ed476b96fa138191bb3cc75fe7dbf834142891ad8d358ee3f9
@@ -85,4 +97,4 @@ entries:
     urls:
     - https://github.com/MichaelSp/photoprism-helm/releases/download/photoprism-0.1.1/photoprism-0.1.1.tgz
     version: 0.1.1
-generated: "2023-03-12T16:51:59.775403319Z"
+generated: "2023-03-12T16:58:55.217072346Z"
