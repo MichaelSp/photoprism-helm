@@ -2,7 +2,7 @@
 apiVersion: {{ include "photoprism.ingress.apiVersion" . }}
 kind: Ingress
 metadata:
-  name: {{ include "photoprism.fullname" . }}
+  name: {{ template "photoprism.fullname" . }}-ingress
   labels:
 {{ include "photoprism.labels" . | indent 4 }}
   {{- with .Values.ingress.annotations }}
@@ -23,11 +23,11 @@ spec:
             backend:
               {{- if semverCompare ">=1.19-0" $.Capabilities.KubeVersion.GitVersion }}
               service:
-                name: {{ include "photoprism.fullname" . }}
+                name: {{ template "photoprism.fullname" . }}-service
                 port:
                   number: {{ .Values.service.port }}
               {{- else }}
-              serviceName: {{ include "photoprism.fullname" . }}
+              serviceName: {{ template "photoprism.fullname" . }}-service
               servicePort: http
               {{- end }}
         {{- end }}
