@@ -1,4 +1,3 @@
-
 name: Release Charts
 
 on:
@@ -17,26 +16,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Turnstyle
-        uses: softprops/turnstyle@v1
-        with:
-          continue-after-seconds: 180
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN  }}
-
-      - name: Fetch history
-        run: git fetch --prune --unshallow
-
       - name: Configure Git
         run: |
           git config user.name "$GITHUB_ACTOR"
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
 
-      # See https://github.com/helm/chart-releaser-action/issues/6
       - name: Set up Helm
         uses: azure/setup-helm@v3.1
-        with:
-          version: v3.6.3
 
       - name: Add dependency chart repos
         run: |
