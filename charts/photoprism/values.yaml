@@ -5,6 +5,7 @@ image:
   # tag: "221118-e58fee0fb"
   pullPolicy: IfNotPresent
 
+imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
@@ -83,7 +84,7 @@ ingress:
     - my.domain.com
     secretName: photoprism-cert
 
-# securityContext:
+securityContext: {}
 #   fsGroup: 100
 #   runAsUser: 1000
 #   runAsGroup: 1000
