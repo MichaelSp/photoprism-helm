@@ -23,11 +23,11 @@ spec:
             backend:
               {{- if semverCompare ">=1.19-0" $.Capabilities.KubeVersion.GitVersion }}
               service:
-                name: {{ template "photoprism.fullname" . }}-service
+                name: {{ template "photoprism.fullname" $ }}-service
                 port:
                   number: {{ .Values.service.port }}
               {{- else }}
-              serviceName: {{ template "photoprism.fullname" . }}-service
+              serviceName: {{ template "photoprism.fullname" $ }}-service
               servicePort: http
               {{- end }}
         {{- end }}
