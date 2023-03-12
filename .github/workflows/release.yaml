@@ -7,7 +7,6 @@ on:
     paths-ignore:
       - 'README.md'
       - 'charts/**/README.md'
-      - 'LICENSE'
 
 jobs:
   release:
@@ -24,11 +23,9 @@ jobs:
       - name: Set up Helm
         uses: azure/setup-helm@v3.5
 
-      - name: Add dependency chart repos
-        run: |
-          helm repo add bitnami https://charts.bitnami.com/bitnami
-
       - name: Run chart-releaser
         uses: helm/chart-releaser-action@v1.5.0
+        with:
+          charts_repo_url: https://MichaelSp.github.io/photoprism-helm
         env:
           CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
