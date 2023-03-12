@@ -70,31 +70,31 @@ service:
 
 ingress:
   enabled: false
-  annotations:
-    kubernetes.io/ingress.class: nginx
-    kubernetes.io/tls-acme: "true"
-    certmanager.k8s.io/cluster-issuer: letsencrypt-prod
-  # className: nginx
-  hosts:
-  - host: my.domain.com
-    paths:
-    - /
-  tls:
-  - hosts:
-    - my.domain.com
-    secretName: photoprism-cert
+#  annotations:
+#    kubernetes.io/ingress.class: nginx
+#    kubernetes.io/tls-acme: "true"
+#    certmanager.k8s.io/cluster-issuer: letsencrypt-prod
+#  className: nginx
+#  hosts:
+#  - host: my.domain.com
+#    paths:
+#    - /
+#  tls:
+#  - hosts:
+#    - my.domain.com
+#    secretName: photoprism-cert
 
 securityContext: {}
 #   fsGroup: 100
 #   runAsUser: 1000
 #   runAsGroup: 1000
 
-resources:
-  requests:
-    memory: 6Gi
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
+resources: {}
+#  requests:
+#    memory: 6Gi
+#   limits:
+#     cpu: 100m
+#     memory: 128Mi
 
 
 # tolerations: []
