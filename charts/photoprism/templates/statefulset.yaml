@@ -9,7 +9,7 @@ spec:
     matchLabels:
       app.kubernetes.io/name: {{ include "photoprism.name" . }}
       app.kubernetes.io/instance: {{ .Release.Name }}
-  serviceName: {{ template "photoprism.fullname" . }}-service
+  serviceName: {{ template "photoprism.fullname" . }}
   replicas: {{ .Values.replicaCount | default 1 }}
   template:
     metadata:
