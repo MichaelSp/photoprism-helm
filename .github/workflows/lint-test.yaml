@@ -37,6 +37,7 @@ jobs:
           fi
 
       - name: Check if bump is required
+        if: steps.list-changed.outputs.changed == 'true'
         id: bumpRequired
         run: |
           # get previous version from chart.yaml on repository default branch
