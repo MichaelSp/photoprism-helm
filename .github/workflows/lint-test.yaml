@@ -55,7 +55,6 @@ jobs:
             echo "required=true" >> "$GITHUB_OUTPUT"
             echo "PREVIOUS_VERSION=${PREVIOUS_VERSION}" >> "$GITHUB_OUTPUT"
           fi
-      - run: echo "outputs required ${{ steps.bumpRequired.outputs.required }} list-changed ${{ steps.list-changed.outputs.changed }}"
 
       - name: Bump the version if required
         if: steps.list-changed.outputs.changed == 'true' && steps.bumpRequired.outputs.required == 'true'
@@ -63,7 +62,7 @@ jobs:
           # increase patch in PREVIOUS_VERSION using bash
           NEXT_VERSION=$(echo $PREVIOUS_VERSION | awk -F. -v OFS=. '{$NF++;print}')
           # update chart.yaml using yq
-          yq eval -i ".version = ${NEXT_VERSION}" charts/photoprism/Chart.yaml
+          yq eval -i ".version = \"${NEXT_VERSION}\"" charts/photoprism/Chart.yaml
 
       # commit changes
       - name: Commit changes
