@@ -25,7 +25,7 @@ jobs:
       - name: Set up chart-testing
         uses: helm/chart-testing-action@v2.4.0
 
-      - name: Run chart-testing (list-changed)
+      - name: Check for changes
         id: list-changed
         run: |
           changed=$(ct list-changed --target-branch ${{ github.event.repository.default_branch }})
@@ -40,7 +40,7 @@ jobs:
           ## first get the file from main branch using git cli 
           git fetch origin ${{ github.event.repository.default_branch }}:${{ github.event.repository.default_branch }}
           ## read the file on the other branch and get the version
-          PREVIOUS_VERSION =$(git show ${{ github.event.repository.default_branch }}:charts/photoprism/Chart.yaml | yq eval '.version')
+          PREVIOUS_VERSION=$(git show ${{ github.event.repository.default_branch }}:charts/photoprism/Chart.yaml | yq eval '.version')
           CURRENT_VERSION=$(yq eval '.version' charts/photoprism/Chart.yaml)
 
           if [[ "${PREVIOUS_VERSION}" == "${CURRENT_VERSION}" ]]; then
