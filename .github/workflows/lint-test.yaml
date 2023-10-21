@@ -73,6 +73,8 @@ jobs:
             git add .
             git commit -m "Bump version to ${NEXT_VERSION}"
             git push origin
+            echo "Failing the build so this commit can trigger a new build"
+            exit 23 # exit to avoid running the rest of the job
           
       - name: Run chart-testing (lint)
         id: lint
