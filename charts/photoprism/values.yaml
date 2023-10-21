@@ -2,7 +2,7 @@
 
 image:
   repository: photoprism/photoprism
-  tag: "230625-ce"
+  tag: "231011-ce"
   pullPolicy: IfNotPresent
 
 imagePullSecrets: []
@@ -10,9 +10,9 @@ nameOverride: ""
 fullnameOverride: ""
 
 # Defaults to 'photoprism'
-#adminPassword: ""
+# adminPassword: ""
 # Use existing secret for Admin password, key 'PHOTOPRISM_ADMIN_PASSWORD'
-#existingSecret:
+# existingSecret:
 
 # Available properties can be discovered by running the command:
 #   photoprism config
@@ -33,7 +33,7 @@ config:
 
 persistence:
   enabled: true
-  storagePath:   &storagePath    /photoprism/storage
+  storagePath: &storagePath /photoprism/storage
   originalsPath: &originalsPath /photoprism/originals
 
   volumeMounts:
@@ -112,3 +112,4 @@ database:
   # host: mariadb.db-mariadb
 # Ignore above settings and use existing secret for database DSN. Key 'PHOTOPRISM_DATABASE_DSN'
   # existingSecret:
+

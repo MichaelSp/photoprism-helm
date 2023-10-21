@@ -6,4 +6,4 @@ description: A Photoprism Helm chart for Kubernetes
 appVersion: "230625-ce"
 version: 0.2.0
 sources:
-- https://github.com/photoprism/photoprism
+  - https://github.com/photoprism/photoprism

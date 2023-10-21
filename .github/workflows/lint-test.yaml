@@ -10,6 +10,9 @@ on:
       - ".github/pull_request_template.md"
       - "CODE_OF_CONDUCT.md"
 
+permissions:
+  contents: write
+
 jobs:
   lint-test:
     runs-on: ubuntu-latest
@@ -25,7 +28,7 @@ jobs:
       - name: Set up chart-testing
         uses: helm/chart-testing-action@v2.4.0
 
-      - name: Run chart-testing (list-changed)
+      - name: Check for changes
         id: list-changed
         run: |
           changed=$(ct list-changed --target-branch ${{ github.event.repository.default_branch }})
@@ -34,48 +37,51 @@ jobs:
           fi
 
       - name: Check if bump is required
+        if: steps.list-changed.outputs.changed == 'true'
         id: bumpRequired
         run: |
           # get previous version from chart.yaml on repository default branch
-          ## first get the file from main branch using git cli 
+          ## first get the file from main branch using git cli
           git fetch origin ${{ github.event.repository.default_branch }}:${{ github.event.repository.default_branch }}
           ## read the file on the other branch and get the version
-          PREVIOUS_VERSION =$(git show ${{ github.event.repository.default_branch }}:charts/photoprism/Chart.yaml | yq eval '.version')
+          PREVIOUS_VERSION=$(git show ${{ github.event.repository.default_branch }}:charts/photoprism/Chart.yaml | yq eval '.version')
           CURRENT_VERSION=$(yq eval '.version' charts/photoprism/Chart.yaml)
 
+          echo "Previous version: '${PREVIOUS_VERSION}'"
+          echo "Current version: '${CURRENT_VERSION}'"
+
           if [[ "${PREVIOUS_VERSION}" == "${CURRENT_VERSION}" ]]; then
-            # version not changed yet, bump it
+            echo "version not changed yet, bump required"
             echo "required=true" >> "$GITHUB_OUTPUT"
             echo "PREVIOUS_VERSION=${PREVIOUS_VERSION}" >> "$GITHUB_OUTPUT"
-          else
-            echo "required=false" >> "$GITHUB_OUTPUT"
+            echo "newVersion=$(echo $PREVIOUS_VERSION | awk -F. -v OFS=. '{$NF++;print}')" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Bump the version if required
+      - name: Bump and commit new version
         if: steps.list-changed.outputs.changed == 'true' && steps.bumpRequired.outputs.required == 'true'
         run: |
-          # increase patch in PREVIOUS_VERSION using bash
-          NEXT_VERSION=$(echo $PREVIOUS_VERSION | awk -F. -v OFS=. '{$NF++;print}')
-          # update chart.yaml using yq
-          yq eval '.version = "${NEXT_VERSION}"' charts/photoprism/Chart.yaml > charts/photoprism/Chart.yaml
-      
-      # commit changes
-      - name: Commit changes
-        if: steps.list-changed.outputs.changed == 'true' && steps.bumpRequired.outputs.required == 'true'
-        uses: EndBug/add-and-commit@v7
-        with:
-          add: 'charts/photoprism/Chart.yaml'
-          
+          yq eval -i '.version = "${{ steps.bumpRequired.outputs.newVersion }}"' charts/photoprism/Chart.yaml
+
+          # checkout PR branch
+          git checkout ${{ github.event.pull_request.head.ref }}
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add .
+          git commit -m "Bump version to '${{ steps.bumpRequired.outputs.newVersion }}'"
+          git push origin
+
+          # Continue on the new commit
+
       - name: Run chart-testing (lint)
         id: lint
-        if: steps.list-changed.outputs.changed == 'true' && steps.bumpRequired.outputs.required != 'true'
+        if: steps.list-changed.outputs.changed == 'true'
         run: ct lint --target-branch ${{ github.event.repository.default_branch }}
 
       - name: Create kind cluster
         uses: helm/kind-action@v1.8.0
-        if: steps.list-changed.outputs.changed == 'true' && steps.bumpRequired.outputs.required != 'true'
+        if: steps.list-changed.outputs.changed == 'true'
 
       - name: Run chart-testing (install)
         id: install
-        if: steps.list-changed.outputs.changed == 'true' && steps.bumpRequired.outputs.required != 'true'
+        if: steps.list-changed.outputs.changed == 'true'
         run: ct install --target-branch ${{ github.event.repository.default_branch }}

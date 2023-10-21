@@ -7,7 +7,7 @@ replicaCount: 1
 
 image:
   repository: photoprism/photoprism
-  tag: "20190703"
+  tag: "20220121"
   pullPolicy: IfNotPresent
 
 nameOverride: ""
