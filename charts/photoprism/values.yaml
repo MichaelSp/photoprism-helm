@@ -44,14 +44,14 @@ persistence:
     mountPath: *storagePath
 
   volumes:
-  - name: originals
-    nfs:
-      server: my.nas.hostname
-      path: /media
-  - name: storage
-    nfs:
-      server: my.nas.hostname
-      path: /photoprism
+#  - name: originals
+#    nfs:
+#      server: my.nas.hostname
+#      path: /media
+#  - name: storage
+#    nfs:
+#      server: my.nas.hostname
+#      path: /photoprism
 
   # volumeClaimTemplates:
   # - metadata:
