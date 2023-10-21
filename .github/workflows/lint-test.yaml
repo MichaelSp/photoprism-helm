@@ -76,19 +76,19 @@ jobs:
           git add .
           git commit -m "Bump version to ${NEXT_VERSION}"
           git push origin
-          echo "Failing the build so this commit can trigger a new build"
-          exit 23 # exit to avoid running the rest of the job
+          
+          # Continue on the new commit
 
       - name: Run chart-testing (lint)
         id: lint
-        if: steps.list-changed.outputs.changed == 'true' && steps.bumpRequired.outputs.required != 'true'
+        if: steps.list-changed.outputs.changed == 'true'
         run: ct lint --target-branch ${{ github.event.repository.default_branch }}
 
       - name: Create kind cluster
         uses: helm/kind-action@v1.8.0
-        if: steps.list-changed.outputs.changed == 'true' && steps.bumpRequired.outputs.required != 'true'
+        if: steps.list-changed.outputs.changed == 'true'
 
       - name: Run chart-testing (install)
         id: install
-        if: steps.list-changed.outputs.changed == 'true' && steps.bumpRequired.outputs.required != 'true'
+        if: steps.list-changed.outputs.changed == 'true'
         run: ct install --target-branch ${{ github.event.repository.default_branch }}
