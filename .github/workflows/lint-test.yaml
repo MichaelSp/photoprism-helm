@@ -60,7 +60,7 @@ jobs:
       - name: Bump and commit new version
         if: steps.list-changed.outputs.changed == 'true' && steps.bumpRequired.outputs.required == 'true'
         run: |
-          yq eval -i '.version = ${{ steps.bumpRequired.outputs.newVersion }}' charts/photoprism/Chart.yaml
+          yq eval -i '.version = "${{ steps.bumpRequired.outputs.newVersion }}"' charts/photoprism/Chart.yaml
 
           # checkout PR branch
           git checkout ${{ github.event.pull_request.head.ref }}
