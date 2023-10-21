@@ -24,7 +24,6 @@ spec:
       - name: photoprism
         image: "{{ .Values.image.repository }}:{{ default .Chart.AppVersion .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
-
         env:
         - name: PHOTOPRISM_HTTP_HOST
           value: 0.0.0.0
@@ -34,7 +33,7 @@ spec:
         - configMapRef:
             name: {{ template "photoprism.fullname" . }}-env
         - configMapRef:
-            name: storage
+            name: {{ template "photoprism.fullname" . }}-storage
         {{- if or (not .Values.existingSecret) (not .Values.database.existingSecret) }}
         - secretRef:
             name: {{ template "photoprism.fullname" . }}-credentials
@@ -51,10 +50,12 @@ spec:
           httpGet:
             path: /
             port: http
+          initialDelaySeconds: 30
         readinessProbe:
           httpGet:
             path: /
             port: http
+          initialDelaySeconds: 30
         resources:
           {{- toYaml .Values.resources | nindent 12 }}
         ports:

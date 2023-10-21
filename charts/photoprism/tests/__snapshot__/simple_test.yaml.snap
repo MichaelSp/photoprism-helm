@@ -12,7 +12,7 @@ configmap matches the snapshot:
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: photoprism
         app.kubernetes.io/version: 230625-ce
-        helm.sh/chart: photoprism-0.2.1
+        helm.sh/chart: photoprism-0.2.3
       name: RELEASE-NAME-photoprism-env
   2: |
     apiVersion: v1
@@ -27,8 +27,8 @@ configmap matches the snapshot:
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: photoprism
         app.kubernetes.io/version: 230625-ce
-        helm.sh/chart: photoprism-0.2.1
-      name: storage
+        helm.sh/chart: photoprism-0.2.3
+      name: RELEASE-NAME-photoprism-storage
 ingress matches the snapshot:
   1: |
     apiVersion: networking.k8s.io/v1
@@ -39,7 +39,7 @@ ingress matches the snapshot:
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: photoprism
         app.kubernetes.io/version: 230625-ce
-        helm.sh/chart: photoprism-0.2.1
+        helm.sh/chart: photoprism-0.2.3
       name: RELEASE-NAME-photoprism
     spec:
       rules: null
@@ -53,7 +53,7 @@ secret matches the snapshot:
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: photoprism
         app.kubernetes.io/version: 230625-ce
-        helm.sh/chart: photoprism-0.2.1
+        helm.sh/chart: photoprism-0.2.3
       name: RELEASE-NAME-photoprism-credentials
     stringData:
       PHOTOPRISM_ADMIN_PASSWORD: photoprism
@@ -68,7 +68,7 @@ service matches the snapshot:
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: photoprism
         app.kubernetes.io/version: 230625-ce
-        helm.sh/chart: photoprism-0.2.1
+        helm.sh/chart: photoprism-0.2.3
       name: RELEASE-NAME-photoprism
     spec:
       ports:
@@ -90,7 +90,7 @@ statefulset matches the snapshot:
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: photoprism
         app.kubernetes.io/version: 230625-ce
-        helm.sh/chart: photoprism-0.2.1
+        helm.sh/chart: photoprism-0.2.3
       name: RELEASE-NAME-photoprism-set
     spec:
       replicas: 1
@@ -115,7 +115,7 @@ statefulset matches the snapshot:
                 - configMapRef:
                     name: RELEASE-NAME-photoprism-env
                 - configMapRef:
-                    name: storage
+                    name: RELEASE-NAME-photoprism-storage
                 - secretRef:
                     name: RELEASE-NAME-photoprism-credentials
               image: photoprism/photoprism:231011-ce
@@ -124,6 +124,7 @@ statefulset matches the snapshot:
                 httpGet:
                   path: /
                   port: http
+                initialDelaySeconds: 30
               name: photoprism
               ports:
                 - containerPort: 2342
@@ -132,6 +133,7 @@ statefulset matches the snapshot:
                 httpGet:
                   path: /
                   port: http
+                initialDelaySeconds: 30
               resources: {}
               volumeMounts:
                 - mountPath: /photoprism/originals
