@@ -1,0 +1,20 @@
+on:
+  push:
+    tags:
+      - "photoprism-*"
+
+jobs:
+  release:
+    if: startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build Changelog
+        uses: mikepenz/release-changelog-builder-action@v4
+        id: github_release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create Release
+        uses: mikepenz/action-gh-release@v0.4.1
+        with:
+          body: ${{steps.github_release.outputs.changelog}}
