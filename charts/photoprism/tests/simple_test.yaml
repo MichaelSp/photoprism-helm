@@ -1,0 +1,32 @@
+suite: Simple Test Suite
+templates:
+  - configmap.yaml
+  - ingress.yaml
+  - secret.yaml
+  - service.yaml
+  - statefulset.yaml
+values:
+  - ../values.yaml
+tests:
+  - it: configmap matches the snapshot
+    template: configmap.yaml
+    asserts:
+      - matchSnapshot: {}
+  - it: ingress matches the snapshot
+    template: ingress.yaml
+    set:
+      ingress.enabled: true
+    asserts:
+      - matchSnapshot: {}
+  - it: secret matches the snapshot
+    template: secret.yaml
+    asserts:
+      - matchSnapshot: {}
+  - it: service matches the snapshot
+    template: service.yaml
+    asserts:
+      - matchSnapshot: {}
+  - it: statefulset matches the snapshot
+    template: statefulset.yaml
+    asserts:
+      - matchSnapshot: {}
