@@ -63,11 +63,13 @@ jobs:
       - name: Commit changes
         if: steps.list-changed.outputs.changed == 'true' && steps.bumpRequired.outputs.required == 'true'
         run: |
+            # checkout PR branch
+            git checkout ${{ github.event.pull_request.head.ref }}
             git config user.name github-actions
             git config user.email github-actions@github.com
             git add .
             git commit -m "Bump version to ${NEXT_VERSION}"
-            git push
+            git push origin
           
       - name: Run chart-testing (lint)
         id: lint
