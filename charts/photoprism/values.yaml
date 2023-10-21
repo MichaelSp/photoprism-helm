@@ -10,9 +10,9 @@ nameOverride: ""
 fullnameOverride: ""
 
 # Defaults to 'photoprism'
-#adminPassword: ""
+# adminPassword: ""
 # Use existing secret for Admin password, key 'PHOTOPRISM_ADMIN_PASSWORD'
-#existingSecret:
+# existingSecret:
 
 # Available properties can be discovered by running the command:
 #   photoprism config
@@ -33,7 +33,7 @@ config:
 
 persistence:
   enabled: true
-  storagePath:   &storagePath    /photoprism/storage
+  storagePath: &storagePath /photoprism/storage
   originalsPath: &originalsPath /photoprism/originals
 
   volumeMounts:
