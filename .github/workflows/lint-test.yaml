@@ -11,7 +11,7 @@ on:
       - "CODE_OF_CONDUCT.md"
 
 permissions:
-  contents: write  
+  contents: write
 
 jobs:
   lint-test:
@@ -40,7 +40,7 @@ jobs:
         id: bumpRequired
         run: |
           # get previous version from chart.yaml on repository default branch
-          ## first get the file from main branch using git cli 
+          ## first get the file from main branch using git cli
           git fetch origin ${{ github.event.repository.default_branch }}:${{ github.event.repository.default_branch }}
           ## read the file on the other branch and get the version
           PREVIOUS_VERSION=$(git show ${{ github.event.repository.default_branch }}:charts/photoprism/Chart.yaml | yq eval '.version')
@@ -60,22 +60,22 @@ jobs:
           # increase patch in PREVIOUS_VERSION using bash
           NEXT_VERSION=$(echo $PREVIOUS_VERSION | awk -F. -v OFS=. '{$NF++;print}')
           # update chart.yaml using yq
-          yq eval '.version = "${NEXT_VERSION}"' charts/photoprism/Chart.yaml > charts/photoprism/Chart.yaml
-      
+          yq eval -i ".version = ${NEXT_VERSION}" charts/photoprism/Chart.yaml
+
       # commit changes
       - name: Commit changes
         if: steps.list-changed.outputs.changed == 'true' && steps.bumpRequired.outputs.required == 'true'
         run: |
-            # checkout PR branch
-            git checkout ${{ github.event.pull_request.head.ref }}
-            git config user.name github-actions
-            git config user.email github-actions@github.com
-            git add .
-            git commit -m "Bump version to ${NEXT_VERSION}"
-            git push origin
-            echo "Failing the build so this commit can trigger a new build"
-            exit 23 # exit to avoid running the rest of the job
-          
+          # checkout PR branch
+          git checkout ${{ github.event.pull_request.head.ref }}
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add .
+          git commit -m "Bump version to ${NEXT_VERSION}"
+          git push origin
+          echo "Failing the build so this commit can trigger a new build"
+          exit 23 # exit to avoid running the rest of the job
+
       - name: Run chart-testing (lint)
         id: lint
         if: steps.list-changed.outputs.changed == 'true' && steps.bumpRequired.outputs.required != 'true'
