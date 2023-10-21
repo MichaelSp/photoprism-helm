@@ -136,8 +136,14 @@ statefulset matches the snapshot:
               volumeMounts:
                 - mountPath: /photoprism/originals
                   name: originals
-                  subPath: photos/family
+                  subPath: orignals
                 - mountPath: /photoprism/storage
                   name: storage
+                  subPath: storage
           securityContext: {}
           terminationGracePeriodSeconds: 5
+          volumes:
+            - emptyDir: {}
+              name: originals
+            - emptyDir: {}
+              name: storage

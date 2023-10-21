@@ -5,7 +5,7 @@ image:
   tag: "231011-ce"
   pullPolicy: IfNotPresent
 
-imagePullSecrets: []
+imagePullSecrets: [ ]
 nameOverride: ""
 fullnameOverride: ""
 
@@ -37,21 +37,23 @@ persistence:
   originalsPath: &originalsPath /photoprism/originals
 
   volumeMounts:
-  - name: originals
-    mountPath: *originalsPath
-    subPath: photos/family
-  - name: storage
-    mountPath: *storagePath
+    - name: originals
+      mountPath: *originalsPath
+      subPath: orignals
+    - name: storage
+      mountPath: *storagePath
+      subPath: storage
 
   volumes:
-#  - name: originals
-#    nfs:
-#      server: my.nas.hostname
-#      path: /media
-#  - name: storage
-#    nfs:
-#      server: my.nas.hostname
-#      path: /photoprism
+    - name: originals
+      emptyDir: { }
+#      pvc:
+#        claimName: photoprism
+#      nfs:
+#        server: my.nas.hostname
+#        path: /media
+    - name: storage
+      emptyDir: { }
 
   # volumeClaimTemplates:
   # - metadata:
@@ -84,12 +86,12 @@ ingress:
 #    - my.domain.com
 #    secretName: photoprism-cert
 
-securityContext: {}
+securityContext: { }
 #   fsGroup: 100
 #   runAsUser: 1000
 #   runAsGroup: 1000
 
-resources: {}
+resources: { }
 #  requests:
 #    memory: 6Gi
 #   limits:
@@ -104,11 +106,11 @@ resources: {}
 # To use a remote MySQL instance, set the value for driver to 'mysql'
 database:
   driver: sqlite
-# Set these values only if the mysql driver is used
+  # Set these values only if the mysql driver is used
   # name: photoprism
   # user: photoprism
   # password: photoprism
   # port: 3306
   # host: mariadb.db-mariadb
-# Ignore above settings and use existing secret for database DSN. Key 'PHOTOPRISM_DATABASE_DSN'
+  # Ignore above settings and use existing secret for database DSN. Key 'PHOTOPRISM_DATABASE_DSN'
   # existingSecret:
