@@ -5,7 +5,7 @@ image:
   tag: "231011-ce"
   pullPolicy: IfNotPresent
 
-imagePullSecrets: [ ]
+imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
@@ -46,14 +46,14 @@ persistence:
 
   volumes:
     - name: originals
-      emptyDir: { }
-#      pvc:
-#        claimName: photoprism
-#      nfs:
-#        server: my.nas.hostname
-#        path: /media
+      emptyDir: {}
+    #      pvc:
+    #        claimName: photoprism
+    #      nfs:
+    #        server: my.nas.hostname
+    #        path: /media
     - name: storage
-      emptyDir: { }
+      emptyDir: {}
 
   # volumeClaimTemplates:
   # - metadata:
@@ -86,12 +86,12 @@ ingress:
 #    - my.domain.com
 #    secretName: photoprism-cert
 
-securityContext: { }
+securityContext: {}
 #   fsGroup: 100
 #   runAsUser: 1000
 #   runAsGroup: 1000
 
-resources: { }
+resources: {}
 #  requests:
 #    memory: 6Gi
 #   limits:
