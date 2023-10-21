@@ -3,12 +3,12 @@ name: Lint and Test Charts
 on:
   pull_request:
     paths-ignore:
-      - 'README.md'
-      - 'charts/**/README.md'
-      - 'LICENSE'
-      - '.github/ISSUE_TEMPLATE/**'
-      - '.github/pull_request_template.md'
-      - 'CODE_OF_CONDUCT.md'
+      - "README.md"
+      - "charts/**/README.md"
+      - "LICENSE"
+      - ".github/ISSUE_TEMPLATE/**"
+      - ".github/pull_request_template.md"
+      - "CODE_OF_CONDUCT.md"
 
 jobs:
   lint-test:
@@ -30,19 +30,52 @@ jobs:
         run: |
           changed=$(ct list-changed --target-branch ${{ github.event.repository.default_branch }})
           if [[ -n "$changed" ]]; then
-            echo "::set-output name=changed::true"
+            echo "changed=true" >> "$GITHUB_OUTPUT"
           fi
 
+      - name: Check if bump is required
+        id: bumpRequired
+        run: |
+          # get previous version from chart.yaml on repository default branch
+          ## first get the file from main branch using git cli 
+          git fetch origin ${{ github.event.repository.default_branch }}:${{ github.event.repository.default_branch }}
+          ## read the file on the other branch and get the version
+          PREVIOUS_VERSION =$(git show ${{ github.event.repository.default_branch }}:charts/photoprism/Chart.yaml | yq eval '.version')
+          CURRENT_VERSION=$(yq eval '.version' charts/photoprism/Chart.yaml)
+
+          if [[ "${PREVIOUS_VERSION}" == "${CURRENT_VERSION}" ]]; then
+            # version not changed yet, bump it
+            echo "required=true" >> "$GITHUB_OUTPUT"
+            echo "PREVIOUS_VERSION=${PREVIOUS_VERSION}" >> "$GITHUB_OUTPUT"
+          else
+            echo "required=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Bump the version if required
+        if: steps.list-changed.outputs.changed == 'true' && steps.bumpRequired.outputs.required == 'true'
+        run: |
+          # increase patch in PREVIOUS_VERSION using bash
+          NEXT_VERSION=$(echo $PREVIOUS_VERSION | awk -F. -v OFS=. '{$NF++;print}')
+          # update chart.yaml using yq
+          yq eval '.version = "${NEXT_VERSION}"' charts/photoprism/Chart.yaml > charts/photoprism/Chart.yaml
+      
+      # commit changes
+      - name: Commit changes
+        if: steps.list-changed.outputs.changed == 'true' && steps.bumpRequired.outputs.required == 'true'
+        uses: EndBug/add-and-commit@v7
+        with:
+          add: 'charts/photoprism/Chart.yaml'
+          
       - name: Run chart-testing (lint)
         id: lint
-        if: steps.list-changed.outputs.changed == 'true'
+        if: steps.list-changed.outputs.changed == 'true' && steps.bumpRequired.outputs.required != 'true'
         run: ct lint --target-branch ${{ github.event.repository.default_branch }}
 
       - name: Create kind cluster
         uses: helm/kind-action@v1.8.0
-        if: steps.list-changed.outputs.changed == 'true'
+        if: steps.list-changed.outputs.changed == 'true' && steps.bumpRequired.outputs.required != 'true'
 
       - name: Run chart-testing (install)
         id: install
-        if: steps.list-changed.outputs.changed == 'true'
+        if: steps.list-changed.outputs.changed == 'true' && steps.bumpRequired.outputs.required != 'true'
         run: ct install --target-branch ${{ github.event.repository.default_branch }}
