@@ -62,9 +62,12 @@ jobs:
       # commit changes
       - name: Commit changes
         if: steps.list-changed.outputs.changed == 'true' && steps.bumpRequired.outputs.required == 'true'
-        uses: EndBug/add-and-commit@v7
-        with:
-          add: 'charts/photoprism/Chart.yaml'
+        run: |
+            git config user.name github-actions
+            git config user.email github-actions@github.com
+            git add .
+            git commit -m "Bump version to ${NEXT_VERSION}"
+            git push
           
       - name: Run chart-testing (lint)
         id: lint
