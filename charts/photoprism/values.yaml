@@ -112,4 +112,3 @@ database:
   # host: mariadb.db-mariadb
 # Ignore above settings and use existing secret for database DSN. Key 'PHOTOPRISM_DATABASE_DSN'
   # existingSecret:
-
