@@ -9,6 +9,10 @@ on:
       - ".github/ISSUE_TEMPLATE/**"
       - ".github/pull_request_template.md"
       - "CODE_OF_CONDUCT.md"
+      
+permissions:
+  contents: read
+  pull-requests: write
 
 jobs:
   lint-test:
