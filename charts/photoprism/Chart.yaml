@@ -6,7 +6,7 @@ maintainers:
 description: A Photoprism Helm chart for Kubernetes
 # Latest version: https://hub.docker.com/r/photoprism/photoprism/tags
 appVersion: "230625-ce"
-version: 0.2.3
+version: 0.2.4
 sources:
   - https://github.com/photoprism/photoprism
 icon: https://photoprism.app/static/icons/logo.svg
