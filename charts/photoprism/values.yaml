@@ -2,7 +2,7 @@
 
 image:
   repository: photoprism/photoprism
-  tag: "231021-ce"
+  tag: "231128-ce"
   pullPolicy: IfNotPresent
 
 imagePullSecrets: []
